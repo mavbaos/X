@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Coolest SF Tech Week Events</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: narrow reading column; planner heatmap first, then a filterable day-grouped agenda */
+:root{
+  --bg:#f6f7f4; --surface:#ffffff; --fg:#1d2420; --muted:#5f6b64; --line:#dfe4de;
+  --accent:#2f6f57; --accent-soft:#e3efe8; --warm:#b5652b; --warm-soft:#f6e9dd;
+  --h:#2f6f57; --p:#6a4fa3; --g:#b5652b; --k:#8a6d1f; --a:#3f6f9e;
+  --heat0:#f1f3ef; --heat1:#d7e8de; --heat2:#a9cfb9; --heat3:#6eab8b; --heat4:#2f6f57;
+  --display:"Fraunces",Georgia,serif; --body:"Figtree",system-ui,-apple-system,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#131815; --surface:#1b211d; --fg:#e7ece8; --muted:#9aa69f; --line:#2c342f;
+  --accent:#7cc4a1; --accent-soft:#1f3329; --warm:#e39a62; --warm-soft:#3a2a1d;
+  --h:#7cc4a1; --p:#b39ce6; --g:#e39a62; --k:#d8bb62; --a:#8ab8e6;
+  --heat0:#1f2622; --heat1:#20382c; --heat2:#2c5a43; --heat3:#3f8062; --heat4:#6fbf97; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131815; --surface:#1b211d; --fg:#e7ece8; --muted:#9aa69f; --line:#2c342f;
+  --accent:#7cc4a1; --accent-soft:#1f3329; --warm:#e39a62; --warm-soft:#3a2a1d;
+  --h:#7cc4a1; --p:#b39ce6; --g:#e39a62; --k:#d8bb62; --a:#8ab8e6;
+  --heat0:#1f2622; --heat1:#20382c; --heat2:#2c5a43; --heat3:#3f8062; --heat4:#6fbf97; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+.wrap{max-width:980px;margin:0 auto;padding-inline:20px;padding-block:28px 64px;display:flex;flex-direction:column;gap:36px}
+h1{font-family:var(--display);font-weight:650;font-size:clamp(28px,5vw,40px);line-height:1.1;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-weight:600;font-size:22px;margin:0 0 4px;text-wrap:balance}
+.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:68ch;margin:8px 0 0}
+header{display:flex;flex-direction:column;gap:6px}
+.pick{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px}
+@media (max-width:720px){.pick{grid-template-columns:1fr}}
+.pick .big{font-family:var(--display);font-size:30px;font-weight:650;color:var(--accent);line-height:1.1}
+.pick ul{margin:10px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:6px}
+.alt{display:flex;flex-direction:column;gap:12px}
+.alt div{border-left:3px solid var(--line);padding-left:12px}
+.alt b{display:block}
+.alt span{color:var(--muted);font-size:13.5px}
+.heatbox{overflow-x:auto;margin-top:14px}
+table.heat{border-collapse:separate;border-spacing:4px;font-variant-numeric:tabular-nums;min-width:640px;width:100%}
+.heat th{font-family:var(--mono);font-size:11.5px;font-weight:500;color:var(--muted);text-align:left;padding:2px 4px;white-space:nowrap}
+.heat td{text-align:center;border-radius:6px;padding:8px 4px;font-family:var(--mono);font-size:13px}
+.heat td.cell{cursor:pointer;border:1px solid transparent}
+.heat td.cell:hover,.heat td.cell:focus-visible{border-color:var(--fg);outline:none}
+.heat td.meta{background:transparent;color:var(--muted);font-size:12.5px}
+.heat tr.best th{color:var(--accent);font-weight:600}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+.controls{display:flex;flex-direction:column;gap:10px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding-block:10px;z-index:2;border-bottom:1px solid var(--line)}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.row .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);min-width:62px}
+button.chip{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:4px 11px;cursor:pointer}
+button.chip[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+button.chip:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input#q{font:inherit;flex:1;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:7px 10px}
+.count{font-size:13px;color:var(--muted)}
+.day{display:flex;flex-direction:column}
+.day h3{font-family:var(--display);font-weight:600;font-size:18px;margin:18px 0 6px;display:flex;gap:10px;align-items:baseline}
+.day h3 small{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+.ev{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;padding:9px 0;border-top:1px solid var(--line);align-items:baseline}
+.ev time{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.ev a{color:var(--fg);text-decoration:none;font-weight:500}
+.ev a:hover{text-decoration:underline;text-decoration-color:var(--accent)}
+.ev .sub{font-size:12.5px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+.ev .tags{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.tag{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border-radius:4px;border:1px solid currentColor;white-space:nowrap}
+.t-H{color:var(--h)}.t-P{color:var(--p)}.t-G{color:var(--g)}.t-K{color:var(--k)}.t-A{color:var(--a)}
+.star{color:var(--warm);font-weight:600}
+.st{font-family:var(--mono);font-size:10.5px;color:var(--warm);background:var(--warm-soft);border-radius:4px;padding:0 5px}
+.morn{font-family:var(--mono);font-size:10.5px;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:0 5px}
+@media (max-width:560px){.ev{grid-template-columns:48px minmax(0,1fr)}.ev .tags{grid-column:2;justify-content:flex-start}}
+.note{font-size:12.5px;color:var(--muted);max-width:75ch}
+.empty{padding:24px 0;color:var(--muted)}
+</style>
+<style>
+[hidden]{display:none!important}
+input#wq{font:inherit;flex:1 1 240px;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:8px;padding:7px 10px}
+input#wq:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+@media (max-width:760px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat{font:inherit;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--fg);cursor:pointer}
+.stat[aria-pressed="true"]{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.stat .n{font-family:var(--display);font-size:24px;font-weight:650}
+.stat .l{font-size:12px;color:var(--muted)}
+.ideas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:860px){.ideas{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:520px){.ideas{grid-template-columns:1fr}}
+.idea{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.idea .ttl{font-weight:600}
+.idea .meta{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.idea .tip{font-size:13.5px;color:var(--accent)}
+.tblwrap{overflow-x:auto;border-top:1px solid var(--line)}
+table.cmp{border-collapse:collapse;width:100%;min-width:760px;font-size:14px}
+.cmp th{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+.cmp th[aria-sort="ascending"]::after{content:" ↑"}.cmp th[aria-sort="descending"]::after{content:" ↓"}
+.cmp td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.cmp td.when{font-family:var(--mono);font-size:12.5px;white-space:nowrap;color:var(--muted)}
+.cmp a{color:var(--fg);font-weight:500;text-decoration:none}
+.cmp a:hover{text-decoration:underline;text-decoration-color:var(--accent)}
+.cmp .host{font-size:12.5px;color:var(--muted)}
+.cmp .hook{max-width:42ch}
+.cmp .tip{font-size:12.5px;color:var(--accent);margin-top:3px}
+.wow{font-family:var(--mono);letter-spacing:2px;color:var(--warm);white-space:nowrap}
+.ty{font-family:var(--mono);font-size:10.5px;padding:1px 6px;border-radius:4px;border:1px solid currentColor;white-space:nowrap}
+.ty-Free{color:var(--warm)}.ty-Experience{color:var(--p)}.ty-Wellness{color:var(--h)}.ty-Sport{color:var(--g)}.ty-Show{color:var(--a)}.ty-Food{color:var(--k)}
+</style>
+</head><body style="margin:0"><div class="wrap">
+<header>
+  <div class="eyebrow">SF Tech Week · Oct 5–11, 2026</div>
+  <h1>The Coolest SF Tech Week Events</h1>
+  <p class="lede">Tired of AI and B2B SaaS events? Here are the coolest ones, from a data center tour to sushi making, a private plane over the Golden Gate and live blacksmithing. Every event links to its RSVP page.</p>
+</header>
+
+<section style="display:flex;flex-direction:column;gap:10px">
+  <div class="eyebrow">By type · click to filter</div>
+  <div class="stats" id="stats"></div>
+</section>
+
+<section aria-labelledby="ideas-h" style="display:flex;flex-direction:column;gap:10px">
+  <div class="eyebrow">Don't miss</div>
+  <h2 id="ideas-h">The one-of-a-kind ones</h2>
+  <div class="ideas" id="ideas"></div>
+</section>
+
+<section aria-labelledby="cmp-h" style="display:flex;flex-direction:column;gap:4px">
+  <div class="eyebrow">Full list</div>
+  <h2 id="cmp-h">All the coolest events</h2>
+  <div class="controls">
+    <div class="row"><span class="lbl">Show</span><span id="w-scope"></span></div>
+    <div class="row"><span class="lbl">Day</span><span id="w-day"></span></div>
+    <div class="row"><span class="lbl">Search</span><input id="wq" type="search" placeholder="e.g. free, sushi, sauna, boat, poker"><span class="count" id="w-count"></span></div>
+  </div>
+  <div class="tblwrap"><table class="cmp" id="tbl"></table></div>
+</section>
+
+<p class="note">Source: official SF Tech Week calendar (tech-week.com), pulled live on Oct 5, 2026 (refreshed with newly added events), with hosts and end times. We picked these by hand from about 1,600 events. ●●● = one of a kind, ●● = stands out. Many are invite-only or need approval, so check the event page.</p>
+</div>
+<script>
+const EV=[["05","08:00","20:00","The DigitalOcean Shuttle","Downtown","DigitalOcean","Free stuff","Ride a free hop-on, hop-off shuttle between transit hubs and Tech Week events, all week",2,"","",0,"b03f9420-0a56-4c00-bad2-ec30acaa25a5"],["05","10:00","21:00","Cyberglam NFC Nail Party","Hayes Valley","hallucinate LLC","Experience","Get your business card put on an NFC chip in your nails",3,"","",0,"e64ff1fb-297b-4356-a10c-9358ec8602fd"],["05","14:00","21:00","Trader Buildathon & Happy Hour","Rincon Hill","True Markets","Free stuff","Get $50 to trade live, then stay for the happy hour",2,"","",0,"8611f9ba-6c91-422c-98b2-a1917ec0051b"],["05","17:00","21:00","Hack Alcatraz with Cloudflare and Kling AI","Embarcadero","Cloudflare","Experience","Cruise around Alcatraz on a boat with demos and drinks",3,"","",0,"85ba1851-ec51-40cf-904f-edfd4f9a66a8"],["05","17:30","21:00","M13 Chess Night","FiDi","M13","Sport & play","Play chess with Grandmaster Sam Shankland at the Mechanics' Institute",3,"","",0,"58dc0e34-ffba-459b-8f60-48ad10bcfbe2"],["05","18:00","","Founders Dinner on the Field with Barry Bonds","South Beach","Airwallex","Experience","Have dinner on the Giants' field with Barry Bonds and 100 founders",3,"","",0,"30b39a74-0947-40a3-9199-6421a861199d"],["05","18:00","21:00","AI Karaoke with Andala Labs","FiDi","Andala Labs","Show","Sing an AI-written song made from your own prompt",3,"","",0,"0ea0e2f1-a6da-4730-9be8-7f438e269f9c"],["05","18:15","20:30","Ship, Scale, Sail","Mission Bay","MotherDuck; Braintrust; Modal","Experience","Sail the Bay at golden hour with AI and data builders",2,"","",0,"bb0dd34f-6599-4cf3-b2e3-606c4224f7da"],["06","09:45","12:00","People, Padel & Proper Crêpes | RollCall × Certn","Embarcadero","rollcall.work","Sport & play","Play padel and eat fresh French crêpes with Talent and HR leaders",2,"","",0,"952c8d28-9ad9-4735-b3f5-3ce484fb9531"],["06","12:00","18:00","Voice & Chill Ice Cream Truck","Jackson Square","AssemblyAI","Free stuff","Catch a free ice cream truck roaming Tech Week",2,"","",0,"16377d5e-b7e0-4138-8871-48d539cffa3b"],["06","15:30","","Bouldering with Akamai Inference Cloud","Lower Nob Hill","HackerSquad; Akamai Inference Cloud","Sport & play","Go bouldering with other builders",2,"","",0,"9038c3b1-d3d9-4d94-bbd6-0d8ded02ed37"],["06","16:00","18:00","Blazel Hot Sauce Competition","SOMA","Blazel","Food & craft","Compete in a hot sauce challenge up the Scoville scale",2,"","",0,"cba1903b-2d99-4a3e-b5e2-8bb67b7a5b8f"],["06","17:30","19:30","Strike It Rich: A Gold Rush Scavenger Hunt","FiDi","StrongSuit","Sport & play","Join a Gold Rush scavenger hunt through FiDi",2,"","",0,"e3f8cab6-1cd0-4873-abae-06196b0d1977"],["06","18:00","21:00","Data Center Tour","Other","Monaco; American Cloud","Experience","Tour a real data center behind the scenes",2,"","",0,"4c5014a6-ff3b-4939-a704-6c5bbb9ec49c"],["06","18:00","21:00","Warriors vs. Lakers Suite","FiDi","Persona","Experience","Watch Warriors vs. Lakers from a private suite",3,"","",0,"ea5820a7-dec6-4fee-b91e-e1e59ca29079"],["06","18:00","20:00","Sushi-Making with Fearn and Kindred Ventures","Mission","Kindred Ventures; Fearn","Food & craft","Make your own sushi in a hands-on workshop",2,"","",0,"9afa6c44-f025-4546-88c6-eee99321faa7"],["06","18:30","21:30","Analog After Hours","NOPA","trunk.io","Sport & play","Play in a pinball tournament for prizes",2,"","",0,"15f08877-91f7-4284-959e-58004295ff9a"],["06","18:30","","Pasta Making Healthier Intelligence & a16z","North Beach","a16z; Healthier Intelligence","Food & craft","Make fresh pasta by hand with a pasta machine",2,"","",0,"4a4367a7-9d03-48bf-8f68-ad2a2fe199bf"],["06","19:00","22:00","Tech-Tile Tuesday at The Exploratorium, Hosted by Lightning AI","Embarcadero","Lightning AI","Experience","Spend an evening at the Exploratorium instead of a panel",3,"","C",0,"0f2683ed-655e-4276-ba0a-6c0d4cd0924c"],["07","07:30","09:30","plunge","Marina","Rivendell","Wellness","Take a cold dip in the Bay at Crissy Field, coffee included",2,"","",0,"5991a93c-0b25-4a62-96c5-b5ecb224cbf0"],["07","08:00","10:00","SOULCYCLE CLASS: Uplane x IM8 🟦","Marina","Uplane (YC F25)","Wellness","Ride a SoulCycle class co-hosted by supplement brand IM8",3,"","",0,"744dd080-5c5a-40a6-a23f-f342499d17f7"],["07","12:00","","Private Plane Tour of SF with Airwallex","FiDi","Airwallex","Experience","Fly over the Golden Gate, Alcatraz and the skyline in a private plane",3,"","",0,"5d8063ab-dca1-4370-a6ea-9fd69c093d48"],["07","12:00","18:00","CTRL Escape Room Hackathon","Alamo Square","Center for The Future (Hack Week); HCB by Hack Foundation","Sport & play","Solve an escape room with AI agents",2,"","",0,"355e20c1-645b-4e5b-837d-fc470fbe1e4a"],["07","16:00","19:00","&cruise — SF ↔ Tokyo","South Beach","Verse","Experience","Join an SF ↔ Tokyo founders' boat cruise",2,"","C",0,"4bb20a7b-2b9b-4b1c-b78e-6fc4de516272"],["07","17:00","","HealMint Smart Ring Raffle (Win 1 of 5 Free Rings!) & Longevity Happy Hour- #SF TechWeek","Downtown","HealMint","Free stuff","Enter a raffle to win one of 5 smart rings",3,"","",0,"2344feff-2c17-4e7b-8eef-5fd136c65c62"],["07","17:00","21:00","Tech Roast Show [Presented by Rippling]","Nob Hill","Rippling","Show","Watch comedians roast SF techies live",2,"","W",0,"a2e1592b-5649-441c-81ed-8c5522c53cc1"],["07","17:30","20:30","Women + AI: Making Waves, a Dinner Cruise on the Bay 🛥️","Embarcadero","Women + AI","Experience","Join a women-in-AI dinner cruise on the Bay during Fleet Week",2,"","",0,"150a3957-0be3-42d6-bac3-81bb8437f404"],["07","17:30","20:30","Pitch and HAHAHAHA 🎤","FiDi","Newgen Venture Partners","Show","Pitch for laughs and a shot at $1,000 in prizes",2,"","",0,"cfa7223d-6c14-4616-9f41-0356402f362b"],["07","18:00","20:30","An exhibition on the measurement of human performance","SOMA","Archetype Work","Wellness","See an exhibition of the tools athletes use to measure performance",2,"","",0,"f37935b8-3f85-4cf7-8392-8484324dbb33"],["07","18:30","20:30","Race to Scale🏎️⚡️","Other","Monaco; Stripe","Sport & play","Race electric go-karts",2,"","",0,"83d80f7a-cb2a-4b76-9962-54f387df6b26"],["07","18:30","20:30","Cogent x Bain Capital Ventures Mahjong Night","FiDi","Cogent; Bain Capital Ventures","Sport & play","Play mahjong with raised stakes",2,"","",0,"fab91be0-5c20-489a-b14d-1beb63cc1174"],["07","19:00","21:00","THE 1,000 STRANGERS EXPERIMENT 5 scoops of ice cream, 5 introductions and human connection.","Embarcadero","Zee Labs","Experience","Get 5 scoops of ice cream and 5 new introductions",3,"","",0,"9c47cb0b-eafb-4125-b4f6-bd7c03b992a3"],["07","19:30","","NOCHE DE LOTERÍA","Mission","Pesito; OnlyExit.ai","Sport & play","Play Mexican Lotería and poker at a cantina night",2,"","",0,"55d1d827-8edf-44ad-872d-e94590eeb0e7"],["07","19:30","","Open to Work: The Game Show","Mission","Khwajalabs","Show","Apply to a fake job on a live game show",2,"","",0,"a2d75555-8fe5-44aa-b2e9-919bc1f5f16a"],["08","07:00","10:15","rollcall.work | Certn: Saunas & Good People at Good Hot","Other","rollcall.work","Wellness","Start the morning in a sauna at Good Hot with Talent and HR leaders",2,"","",0,"965cdd64-4e9d-4ad4-902f-e50bd05e3a56"],["08","08:00","10:00","Canyon Commuter Stopoff","Cow Hollow","Canyon Bicycles","Free stuff","Get free coffee and pastries if you bike in",2,"","",0,"197b1196-7ca4-434f-af44-d7c44cd4a735"],["08","08:30","","Founder Fuel: Coffee, Counsel & B12 Shots","FiDi","Grellas Shah","Free stuff","Get a free B12 shot with your morning coffee",3,"","",0,"4bb3b4b1-058e-4890-a6a3-e8130b98f964"],["08","12:00","","McLaren x Airwallex Ride and Share Experience","FiDi","Airwallex","Experience","Get picked up in a McLaren and tell your founder story on camera",3,"","",0,"5725a277-9b2a-426e-a58b-2be80b0a61b8"],["08","12:15","13:30","Founder-Led Strength Training","Marina","San Francisco General Intelligence Laboratory","Free stuff","Take a free 45-min hot strength class, then refuel with recovery snacks",2,"","",0,"b9d7746d-888b-4584-b256-13e7b2aa1ea4"],["08","13:00","17:00","Blue Angels AirShow on a yacht","South Beach","Tenki Cloud","Experience","Watch the Blue Angels from an 89-ft yacht",3,"","",0,"10bf5803-a5b3-41cd-86f7-6176d1573fc0"],["08","17:00","","Swag Lab: Make It & Take It","FiDi","Goody","Free stuff","Design custom merch and take it home",2,"","",0,"cafdb1ea-f6d9-443d-aa7d-25325d58833e"],["08","17:00","20:30","🧠 Agent Memory Night: Technical Deep Dives + Mac Mini GIVEAWAY!","FiDi","The Multimodal Society; FalkorDB","Free stuff","Get a chance to win a Mac Mini",2,"","",0,"fb0cd814-59ee-4047-ba2f-076e6d5fb297"],["08","18:00","22:00","Founders Race Night","FiDi","Corgi; Base44; Entrepreneurs First","Sport & play","Race go-karts against other founders",2,"","",0,"9a9729a9-c299-46e1-abac-d02e894fcc83"],["08","18:00","22:00","Deel After Dark - Gala","SOMA","Deel","Experience","Party at a gala with a secret headline artist",2,"","",0,"9b4cfd49-63f4-4b9c-8726-059dd766f9e2"],["08","18:00","20:30","Reset at the Sauna Garden with Forerunner Ventures, Rho, and Verci","Lower Nob Hill","Verci; Forerunner Ventures","Wellness","Unwind in the Sauna Garden at Alchemy Springs",2,"","",0,"131971dc-fee5-468c-a25f-e02447486c2a"],["08","18:00","19:30","Focus on Demand - Train Your Brain with Neurotech & VR","Jackson Square","Vayu Labs","Wellness","Train your focus with EEG neurofeedback, VR and brainwave audio",2,"","",0,"adeb916f-3450-48ab-a57b-13df5e0c0f1c"],["08","18:00","21:00","The Hiring Roast Show","SOMA","LEAP US, Inc.","Show","Watch resumes get roasted live",2,"","",0,"8bde3fdb-feb4-4343-b640-1efaf5aefcb8"],["08","18:30","","The Next Big Name in Painting — Live, In a Living Room","Haight Ashbury","Unfram_d; Gildre","Experience","Watch a rising-star painter work live in a living room",2,"","",0,"fd2709b2-1e5a-4c76-b4e3-3488c52a96a2"],["08","18:30","21:00","👑 Pitches & Punchlines: A Drag Queen Roasts Your Pitch","Castro","StartOut","Show","Watch a drag queen roast six founders' pitches",3,"","",0,"f8086312-08ea-448c-beb2-2846d29d4f49"],["08","19:00","23:00","Token Arcade: Play Games, Win ChatGPT & Claude Tokens","Downtown","Aigeo,Inc.; Broadar; Hibee International Consulting","Free stuff","Play arcade games to win ChatGPT and Claude API tokens",2,"","",0,"6aba4204-6414-422f-b661-7bb5a2c9968c"],["08","19:00","22:00","Monaco x Sirius: Poker Tournament","SOMA","Sirius; Monaco","Sport & play","Play a no buy-in poker tournament",2,"","",0,"a97dbfed-0efa-4094-be97-d7e9cfe9dbc0"],["08","20:00","23:00","No Phones Party with CatGPT & Apollo","Nob Hill","Smooth Media; Apollo","Experience","Put your phone away for a whole party",2,"","",0,"127962b4-dae0-4537-b42a-a8b9698d48cd"],["09","07:30","","Surf Meetup for Founders and Investors with Forgepoint Capital and Ashurst Perkins Coie","Ocean Beach","Ashurst Perkins Coie","Sport & play","Surf Ocean Beach with founders and investors",3,"","",0,"c03c4873-8ca9-429f-bb49-d0a98a5d77d7"],["09","11:00","16:00","The Science of Speed | Tech Week Meets Fleet Week","Marina","Together AI","Experience","Watch the Blue Angels from front-row seats",2,"","",0,"c5753cdb-ec8d-4b47-91b9-31a056f9bbf2"],["09","11:00","13:00","Kindred Motorworks","Other","Kindred Motorworks","Experience","Tour a factory that rebuilds iconic vintage cars",2,"","",0,"2b1c05ed-2178-4cc1-99e5-0c417cadbf5a"],["09","12:00","16:00","The Tech Week Flyover","SOMA","Sentry; Exa.ai; Neon by Databricks","Experience","Watch the Blue Angels from a rooftop",2,"","C",0,"74261731-764b-4b92-acd7-58e1ad592acb"],["09","13:00","","CoreWeave Forge: Live Blacksmithing","Mission","CoreWeave","Experience","Watch live blacksmithing at a real anvil",3,"","",0,"bba8cee8-fe1b-4009-991d-5e4461cfb57e"],["09","17:00","20:00","Sushi & Sandbox-maxxing","Salesforce Park","Tenki Cloud","Food & craft","Eat at a private 30-seat sushi counter",2,"","",0,"a88869c2-5509-47de-b007-af890f9f9e35"],["09","18:00","","Kairo Pickleball Tournament: $10,000 Giveaway","Union Square","Kairo","Free stuff","Compete for a $10,000 winner-takes-all pickleball prize",3,"","",0,"9d0f3c5b-6dd6-4b2a-941f-ceb6a1ad7e57"],["09","19:00","22:00","Agent Economy Gala","Union Square","Lemma; Anwar Enterprises; Maison Noir","Experience","Dress up for a Gatsby-style black-tie gala at the Redwood Room",2,"","",0,"55d221e9-89d3-44df-9030-692667ab68bf"],["09","19:00","","Murder Mystery  - #SF TechWeek","Downtown","Qualia AI","Experience","Solve a murder mystery",2,"","",0,"d4d3a22b-36d3-4808-874e-65498bf84454"],["10","10:30","12:30","Tech n Techno Breakfast Rave","SOMA","BlueAlpha","Experience","Dance at a breakfast rave with a DJ from Berlin's clubs",3,"","",0,"d4a0d533-e927-4140-9949-a6b5193531b2"],["10","11:00","14:00","CarShowAndWine","Mission","OnlyExit Ventures","Experience","See Ferraris, Lamborghinis and Porsches up close, glass of wine in hand",2,"","",0,"e602a8ff-18ca-4071-a2b9-622c50fa3860"],["10","13:00","","Waybox Car Wash","Stanford","Waybox Inc","Free stuff","Get your car washed for free by the CEO himself",3,"","",0,"00462047-5c59-4851-8f6c-18580d3205fd"],["10","17:30","20:00","The Robot Contest + Afterparty","SOMA","Daidai Labs; Fontaine Founders","Show","Watch 10 robots compete, then vote for the winner",3,"","",0,"7f8484eb-0f23-4943-aade-862ffd4bd184"]];
+const DAYS=[["05","Mon"],["06","Tue"],["07","Wed"],["08","Thu"],["09","Fri"],["10","Sat"],["11","Sun"]];
+const TYPES=["Free stuff","Experience","Wellness","Sport & play","Food & craft","Show"];
+const ev=EV.map(r=>({d:r[0],t:r[1],end:r[2],title:r[3],loc:r[4],hosts:r[5],type:r[6],hook:r[7],wow:r[8],idea:r[9],st:r[10],url:"https://www.tech-week.com/calendar/sf/events/"+r[12]}));
+function el(t,a={},...k){const e=document.createElement(t);for(const[x,y]of Object.entries(a)){if(x==="class")e.className=y;else if(x.startsWith("on"))e.addEventListener(x.slice(2),y);else e.setAttribute(x,y)}for(const c of k)if(c!==null&&c!==undefined&&c!=="")e.append(c);return e}
+function fmt(t){let[h,m]=t.split(":").map(Number);const ap=h<12?"am":"pm";h=h%12||12;return h+(m?":"+String(m).padStart(2,"0"):"")+ap}
+const dn=d=>DAYS.find(x=>x[0]===d)[1]+" "+(+d);
+const tycls=t=>"ty ty-"+t.split(" ")[0];
+const st={type:"",scope:"all",day:"",q:"",sort:"when",dir:1};
+function chips(id,items,isOn,onClick){const c=document.getElementById(id);c.replaceChildren();c.className="row";items.forEach(([k,lab])=>c.append(el("button",{class:"chip","aria-pressed":String(isOn(k)),onclick:()=>{onClick(k);render()}},lab)))}
+// ideas
+(function(){const box=document.getElementById("ideas");ev.filter(e=>e.wow===3&&!e.st).sort((a,b)=>(a.d+a.t).localeCompare(b.d+b.t)).forEach(e=>box.append(el("div",{class:"idea"},el("span",{class:"meta"},dn(e.d)+" · "+fmt(e.t)+" · "+e.type),el("a",{class:"ttl",href:e.url,target:"_blank",rel:"noopener",style:"color:var(--fg);text-decoration:none"},e.hook),el("span",{style:"font-size:12.5px;color:var(--muted)"},e.title+" · "+e.hosts))))})();
+function render(){
+  const s=document.getElementById("stats");s.replaceChildren();
+  [["","All",ev.length],...TYPES.map(t=>[t,t,ev.filter(e=>e.type===t).length])].forEach(([k,l,n])=>s.append(el("button",{class:"stat","aria-pressed":String(st.type===k),onclick:()=>{st.type=k;render()}},el("div",{class:"n"},String(n)),el("div",{class:"l"},l))));
+  chips("w-scope",[["all","All"],["top","●●● One of a kind"],["morn","Mornings only"],["free","Free stuff"]],k=>st.scope===k,k=>st.scope=k);
+  chips("w-day",[["","All days"],...DAYS.map(([d,w])=>[d,w+" "+(+d)])],k=>st.day===k,k=>st.day=k);
+  const q=st.q.toLowerCase();
+  let L=ev.filter(e=>(!st.type||e.type===st.type)&&(st.scope!=="top"||e.wow===3)&&(st.scope!=="morn"||e.t<"12:00")&&(st.scope!=="free"||e.type==="Free stuff")&&(!st.day||e.d===st.day)&&(!q||(e.title+" "+e.hook+" "+e.hosts+" "+e.loc).toLowerCase().includes(q)));
+  const key={when:e=>e.d+e.t,event:e=>e.title.toLowerCase(),type:e=>e.type,wow:e=>-e.wow};
+  L.sort((a,b)=>{const x=key[st.sort](a),y=key[st.sort](b);return (x<y?-1:x>y?1:0)*st.dir||(a.d+a.t).localeCompare(b.d+b.t)});
+  document.getElementById("w-count").textContent=L.length+" events";
+  const tb=document.getElementById("tbl");tb.replaceChildren();
+  const hr=el("tr");[["when","When"],["event","Event & host"],["","What you get"],["type","Type"],["wow","Wow"]].forEach(([k,l])=>{const th=el("th",k?{tabindex:"0","aria-sort":st.sort===k?(st.dir>0?"ascending":"descending"):"none"}:{},l);if(k){const go=()=>{if(st.sort===k)st.dir*=-1;else{st.sort=k;st.dir=1}render()};th.addEventListener("click",go);th.addEventListener("keydown",x=>{if(x.key==="Enter"){go()}})}hr.append(th)});
+  tb.append(el("thead",{},hr));const body=el("tbody");
+  if(!L.length)body.append(el("tr",{},el("td",{colspan:"5",class:"empty"},"No events match. Try “All” or “All days”.")));
+  L.forEach(e=>{const ev2=el("td",{},el("a",{href:e.url,target:"_blank",rel:"noopener"},e.title),el("div",{class:"host"},e.hosts+(e.loc?" · "+e.loc:"")),e.st?el("span",{class:"st"},{C:"closed",W:"waitlist",F:"full"}[e.st]):"");
+    const hook=el("td",{class:"hook"},e.hook);
+    body.append(el("tr",{},el("td",{class:"when"},dn(e.d),el("br"),fmt(e.t)+(e.end?"–"+fmt(e.end):"")),ev2,hook,el("td",{},el("span",{class:tycls(e.type)},e.type)),el("td",{class:"wow","aria-label":e.wow===3?"one of a kind":"stands out"},e.wow===3?"●●●":"●●")))});
+  tb.append(body);
+}
+document.getElementById("wq").addEventListener("input",x=>{st.q=x.target.value;render()});
+render();
+</script>
+
+</body></html>
