@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Coolest SF Tech Week Events</title>
 <meta name="description" content="Hand-picked SF Tech Week events that aren't another AI panel: boats, saunas, sushi, blacksmithing and more.">
-<meta name="theme-color" content="#f6f9f7">
+<meta name="theme-color" content="#f7f7f5">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -12,11 +12,10 @@
    One hue family (mint/sage) carries all color; everything else is slate-tinted neutral. */
 :root{
   --wada-turquoise:#b5decc; --wada-cobalt:#96d1aa; --wada-slate:#34454c;
-  --bg:#f6f9f7; --surface:#ffffff; --fg:#1e2a2f; --muted:#5a6a70; --line:#e2e9e6; --line-strong:#cfdad5;
-  --hero:#d3ebe0; --hero-fg:#1e2a2f; --hero-muted:#3d5359;
+  --bg:#f7f7f5; --surface:#ffffff; --fg:#1e2a2f; --muted:#5a6a70; --line:#e6e6e2; --line-strong:#d6d7d2;
   --accent:#1f6b52; --accent-soft:#e4f2ea; --mint:var(--wada-cobalt);
   --on-active:#ffffff; --active:var(--wada-slate); --active-count:var(--wada-turquoise);
-  --bar:rgba(246,249,247,.86);
+  --bar:rgba(247,247,245,.88);
   --shadow:0 1px 2px rgba(30,42,47,.04),0 6px 20px -8px rgba(30,42,47,.12);
   --shadow-hover:0 2px 4px rgba(30,42,47,.05),0 14px 32px -12px rgba(30,42,47,.2);
   --display:"Newsreader",Georgia,serif; --body:"Figtree",system-ui,-apple-system,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
@@ -24,7 +23,6 @@
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#12191b; --surface:#182224; --fg:#e6eeea; --muted:#9aaba6; --line:#24302f; --line-strong:#33423f;
-  --hero:#1b3a31; --hero-fg:#e6eeea; --hero-muted:#a9c2b9;
   --accent:#96d1aa; --accent-soft:#1d322b; --mint:var(--wada-cobalt);
   --on-active:#12191b; --active:var(--wada-cobalt); --active-count:#1e4a3c;
   --bar:rgba(18,25,27,.86);
@@ -33,7 +31,6 @@
   color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#12191b; --surface:#182224; --fg:#e6eeea; --muted:#9aaba6; --line:#24302f; --line-strong:#33423f;
-  --hero:#1b3a31; --hero-fg:#e6eeea; --hero-muted:#a9c2b9;
   --accent:#96d1aa; --accent-soft:#1d322b; --mint:var(--wada-cobalt);
   --on-active:#12191b; --active:var(--wada-cobalt); --active-count:#1e4a3c;
   --bar:rgba(18,25,27,.86);
@@ -52,18 +49,12 @@ a{text-underline-offset:3px;text-decoration-thickness:1px}
 .wrap{max-width:1040px;margin:0 auto;padding:20px 20px 72px;display:flex;flex-direction:column;gap:44px}
 @media (max-width:560px){.wrap{padding:12px 16px 56px;gap:36px}}
 
-/* Hero: the one region the color owns */
-.hero{background:var(--hero);color:var(--hero-fg);border-radius:24px;padding:clamp(28px,6vw,64px) clamp(22px,5vw,56px);display:flex;flex-direction:column;gap:18px;position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;inset:auto -80px -120px auto;width:320px;height:320px;border-radius:50%;background:var(--wada-cobalt);opacity:.45;pointer-events:none}
-.hero > *{position:relative;z-index:1}
-:root[data-theme="dark"] .hero::after{opacity:.16}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero::after{opacity:.16}}
-.date{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;background:var(--wada-slate);color:var(--wada-turquoise);font-size:13px;font-weight:600;border-radius:999px;padding:5px 12px 5px 10px}
+/* Header sits on the page itself: no panel, no ornament */
+.top{display:flex;flex-direction:column;gap:14px;padding-top:clamp(12px,4vw,40px)}
+.date{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--muted);font-size:13px;font-weight:500;border-radius:999px;padding:4px 12px 4px 10px;font-variant-numeric:tabular-nums}
 .date i{width:7px;height:7px;border-radius:50%;background:var(--wada-cobalt);display:block}
-h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,6.4vw,64px);line-height:1.02;letter-spacing:-.025em;margin:0;text-wrap:balance;max-width:14ch}
-.lede{color:var(--hero-muted);font-size:clamp(16px,1.8vw,18px);max-width:58ch;margin:0;text-wrap:pretty}
-.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:6px;font-size:14px;color:var(--hero-muted)}
-.facts b{font-family:var(--display);font-weight:600;font-size:24px;color:var(--hero-fg);margin-right:6px;font-variant-numeric:tabular-nums}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,6.4vw,60px);line-height:1.03;letter-spacing:-.025em;margin:0;text-wrap:balance}
+.lede{color:var(--muted);font-size:clamp(16px,1.8vw,18px);max-width:62ch;margin:0;text-wrap:pretty}
 
 h2{font-family:var(--display);font-weight:600;font-size:clamp(22px,3vw,28px);letter-spacing:-.015em;line-height:1.15;margin:0;text-wrap:balance}
 .sec{display:flex;flex-direction:column;gap:16px}
@@ -73,9 +64,10 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(22px,3vw,28px);let
 /* Sticky filter bar: the type switcher lives here so every click visibly changes what's below */
 .bar{position:sticky;top:0;z-index:5;margin:0 -20px;padding:12px 20px;background:var(--bar);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
 .bar.stuck{border-bottom-color:var(--line)}
-@media (max-width:560px){.bar{position:relative;margin:0 -16px;padding:0 16px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}.bar.stuck{border-bottom-color:transparent}.hero::after{width:220px;height:220px;inset:auto -90px -110px auto}}
+@media (max-width:560px){.bar{position:relative;margin:0 -16px;padding:0 16px;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}.bar.stuck{border-bottom-color:transparent}}
 .bar-in{display:flex;flex-direction:column;gap:10px}
-.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px;margin:-2px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+@media (max-width:560px){.tabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin:0 -16px;padding:2px 16px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 28px),transparent)}}
 .tabs::-webkit-scrollbar{display:none}
 .tab{font:inherit;font-size:14px;font-weight:500;display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border:1px solid var(--line-strong);background:var(--surface);color:var(--fg);border-radius:999px;padding:7px 8px 7px 14px;cursor:pointer;transition:background-color .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease)}
 .tab .n{font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;min-width:24px;text-align:center;border-radius:999px;padding:1px 7px;background:var(--accent-soft);color:var(--accent);transition:inherit}
@@ -96,18 +88,6 @@ h2{font-family:var(--display);font-weight:600;font-size:clamp(22px,3vw,28px);let
 .search input::placeholder{color:var(--muted)}
 .search input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 .reset{font:inherit;font-size:13px;font-weight:500;border:0;background:none;color:var(--accent);cursor:pointer;padding:4px 2px;text-decoration:underline;text-underline-offset:3px}
-
-/* Highlights */
-.ideas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-@media (max-width:860px){.ideas{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){.ideas{grid-template-columns:1fr}}
-.idea{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow);transition:box-shadow .3s var(--ease),transform .3s var(--ease),border-color .3s}
-.idea:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);border-color:var(--line-strong)}
-.idea .meta{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
-.idea .meta .ty{margin-left:auto}
-.idea a{color:var(--fg);text-decoration:none;font-family:var(--display);font-weight:600;font-size:18px;line-height:1.25;letter-spacing:-.01em;text-wrap:balance}
-.idea a::after{content:"";position:absolute;inset:0;border-radius:16px}
-.idea .by{font-size:13px;color:var(--muted);margin-top:auto}
 
 /* Full list */
 table.cmp{border-collapse:collapse;width:100%;font-size:14.5px}
@@ -131,7 +111,6 @@ table.cmp{border-collapse:collapse;width:100%;font-size:14.5px}
 .wow i{width:7px;height:7px;border-radius:50%;background:var(--line-strong);display:block}
 .wow i.on{background:var(--accent)}
 .empty{padding:40px 12px;color:var(--muted);text-align:center}
-.none{grid-column:1/-1;padding:28px;border:1px dashed var(--line-strong);border-radius:16px;color:var(--muted);text-align:center}
 
 @media (max-width:720px){
   .cmp thead{display:none}
@@ -150,37 +129,29 @@ table.cmp{border-collapse:collapse;width:100%;font-size:14.5px}
 /* The one authored moment: results settle in whenever a filter switches */
 @keyframes settle{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
 .swap{animation:settle .45s var(--ease) both}
-@media (prefers-reduced-motion:reduce){.swap{animation:none}.idea,.idea:hover{transition:none;transform:none}}
+@media (prefers-reduced-motion:reduce){.swap{animation:none}}
 
 .note{font-size:13px;color:var(--muted);max-width:72ch;margin:0;padding-top:20px;border-top:1px solid var(--line)}
 </style>
 </head><body><div class="wrap">
 
-<header class="hero">
+<header class="top">
   <span class="date"><i></i>SF Tech Week · Oct 5–11, 2026</span>
   <h1>The Coolest SF Tech Week Events</h1>
   <p class="lede">Tired of AI and B2B SaaS events? Here are the coolest ones, from a data center tour to sushi making, a private plane over the Golden Gate and live blacksmithing. Every event links to its RSVP page.</p>
-  <div class="facts" id="facts"></div>
 </header>
-
-<div class="bar" id="bar">
-  <div class="bar-in">
-    <div class="tabs" id="tabs" role="group" aria-label="Filter by type"></div>
-    <div class="subrow">
-      <div class="seg" id="w-day" role="group" aria-label="Filter by day"></div>
-      <div class="seg" id="w-scope" role="group" aria-label="Show"></div>
-      <label class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="wq" type="search" placeholder="Search: sushi, sauna, boat, poker…" aria-label="Search events"></label>
-    </div>
-  </div>
-</div>
-
-<section class="sec" aria-labelledby="ideas-h">
-  <div class="sec-head"><h2 id="ideas-h">The one-of-a-kind ones</h2><span class="count" id="i-count"></span></div>
-  <div class="ideas" id="ideas"></div>
-</section>
 
 <section class="sec" aria-labelledby="cmp-h" id="list">
   <div class="sec-head"><h2 id="cmp-h">All the coolest events</h2><span class="count" id="w-count" aria-live="polite"></span></div>
+  <div class="bar" id="bar">
+    <div class="bar-in">
+      <div class="tabs" id="tabs" role="group" aria-label="Filter by type"></div>
+      <div class="subrow">
+        <div class="seg" id="w-day" role="group" aria-label="Filter by day"></div>
+        <label class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="wq" type="search" placeholder="Search: sushi, sauna, boat, poker…" aria-label="Search events"></label>
+      </div>
+    </div>
+  </div>
   <table class="cmp" id="tbl"></table>
 </section>
 
@@ -195,37 +166,23 @@ function el(t,a={},...k){const e=document.createElement(t);for(const[x,y]of Obje
 function fmt(t){let[h,m]=t.split(":").map(Number);const ap=h<12?"am":"pm";h=h%12||12;return h+(m?":"+String(m).padStart(2,"0"):"")+ap}
 const dn=d=>DAYS.find(x=>x[0]===d)[1]+" "+(+d);
 const dots=n=>el("span",{class:"wow",role:"img","aria-label":n===3?"one of a kind":"stands out"},el("i",{class:"on"}),el("i",{class:"on"}),el("i",{class:n===3?"on":""}));
-const st={type:"",scope:"all",day:"",q:"",sort:"when",dir:1};
+const st={type:"",day:"",q:"",sort:"when",dir:1};
 const plural=(n,w)=>n+" "+w+(n===1?"":"s");
-
-document.getElementById("facts").append(
-  el("span",{},el("b",{},String(ev.length)),"events"),
-  el("span",{},el("b",{},String(ev.filter(e=>e.wow===3).length)),"one of a kind"),
-  el("span",{},el("b",{},String(new Set(ev.map(e=>e.d)).size)),"days"));
 
 function seg(id,items,cur,set){const c=document.getElementById(id);c.replaceChildren(...items.map(([k,lab])=>el("button",{type:"button","aria-pressed":String(cur===k),onclick:()=>{set(k);render(true)}},lab)))}
 function swap(node){node.classList.remove("swap");void node.offsetWidth;node.classList.add("swap")}
 
-function match(e,{ignoreScope}={}){const q=st.q.trim().toLowerCase();
-  return (!st.type||e.type===st.type)&&(ignoreScope||st.scope!=="top"||e.wow===3)&&(ignoreScope||st.scope!=="morn"||e.t<"12:00")&&(!st.day||e.d===st.day)&&(!q||(e.title+" "+e.hook+" "+e.hosts+" "+e.loc+" "+e.type).toLowerCase().includes(q))}
+function match(e){const q=st.q.trim().toLowerCase();
+  return (!st.type||e.type===st.type)&&(!st.day||e.d===st.day)&&(!q||(e.title+" "+e.hook+" "+e.hosts+" "+e.loc+" "+e.type).toLowerCase().includes(q))}
 
-function reset(){st.type="";st.scope="all";st.day="";st.q="";document.getElementById("wq").value="";render(true)}
+function reset(){st.type="";st.day="";st.q="";document.getElementById("wq").value="";render(true)}
 
 function render(animate){
   const tabs=document.getElementById("tabs");
   tabs.replaceChildren(...[["","All",ev.length],...TYPES.map(t=>[t,t,ev.filter(e=>e.type===t).length])].map(([k,l,n])=>
     el("button",{type:"button",class:"tab","aria-pressed":String(st.type===k),onclick:()=>{st.type=k;render(true)}},l,el("span",{class:"n"},String(n)))));
   seg("w-day",[["","All days"],...DAYS.filter(([d])=>ev.some(e=>e.d===d)).map(([d,w])=>[d,w+" "+(+d)])],st.day,k=>st.day=k);
-  seg("w-scope",[["all","Everything"],["top","One of a kind"],["morn","Mornings"]],st.scope,k=>st.scope=k);
 
-  // Highlights follow type/day/search (scope doesn't apply: they're all one of a kind)
-  const box=document.getElementById("ideas");
-  const I=ev.filter(e=>e.wow===3&&!e.st&&match(e,{ignoreScope:true})).sort((a,b)=>(a.d+a.t).localeCompare(b.d+b.t));
-  box.replaceChildren(...(I.length?I.map(e=>el("article",{class:"idea"},
-      el("div",{class:"meta"},el("span",{},dn(e.d)+" · "+fmt(e.t)),el("span",{class:"ty"},e.type)),
-      el("a",{href:e.url,target:"_blank",rel:"noopener"},e.hook),
-      el("span",{class:"by"},e.title+" · "+e.hosts))):[el("div",{class:"none"},"No one-of-a-kind picks here, but check the full list below.")]));
-  document.getElementById("i-count").textContent=plural(I.length,"pick");
 
   let L=ev.filter(e=>match(e));
   const key={when:e=>e.d+e.t,event:e=>e.title.toLowerCase(),type:e=>e.type,wow:e=>-e.wow};
@@ -244,7 +201,7 @@ function render(animate){
       el("td",{class:"tycell"},el("span",{class:"ty"},e.type)),
       el("td",{class:"wowcell"},dots(e.wow))))});
   tb.append(body);
-  if(animate){swap(box);swap(body)}
+  if(animate)swap(body)
 }
 let qt;document.getElementById("wq").addEventListener("input",x=>{st.q=x.target.value;clearTimeout(qt);qt=setTimeout(()=>render(true),120)});
 const bar=document.getElementById("bar");
